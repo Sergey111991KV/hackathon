@@ -3,11 +3,11 @@ version: "3.3"
 services:
   db:
     image: postgres:latest
-    container_name: placid_db
+    container_name: hackathon_db
     environment:
-      - POSTGRES_DB=placid_dev
-      - POSTGRES_USER=placid_user
-      - POSTGRES_PASSWORD=placid_pass
+      - POSTGRES_DB=hackathon_dev
+      - POSTGRES_USER=hackathon_user
+      - POSTGRES_PASSWORD=hackathon_pass
     ports:
       - 5431:5432
     volumes:

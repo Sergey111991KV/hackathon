@@ -72,7 +72,7 @@ main = do
   -- set some environment variables (see
   -- https://www.postgresql.org/docs/9.5/static/libpq-envars.html)
   -- to point to a running PostgreSQL server for this example to work.
-  let connStr = ""
+  let connStr = "hackathon/project 5431 hackathon/project"
   pool <- initConnectionPool connStr
   initDB connStr
   mgr <- newManager defaultManagerSettings
