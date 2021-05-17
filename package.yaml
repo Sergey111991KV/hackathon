@@ -1,0 +1,85 @@
+name:                hackathon
+version:             0.1.0.0
+github:              "githubuser/hackathon"
+license:             BSD3
+author:              "Author name here"
+maintainer:          "example@example.com"
+copyright:           "2021 Author name here"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/hackathon#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- mtl
+- bytestring
+- base64-bytestring
+- text
+- either
+
+
+# Logger
+- co-log
+- monad-logger
+
+# Database
+- postgresql-simple
+- persistent
+- persistent-postgresql
+- persistent-template
+- esqueleto
+- resource-pool
+
+# Web
+- aeson
+- wai
+- warp
+- http-client
+- servant-client
+- servant-options
+- servant-server
+
+default-extensions:
+- OverloadedStrings
+
+library:
+  when:
+    condition: false
+    other-modules: Paths_hackathon
+  ghc-options:
+    - -Wall
+    - -Werror
+  source-dirs: src
+
+
+executables:
+  hackathon-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hackathon
+
+tests:
+  hackathon-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hackathon

@@ -1,0 +1,18 @@
+# placid/dependencies:latest
+FROM ubuntu:bionic
+
+RUN apt-get update && apt-get install -y curl
+RUN curl -sSL https://get.haskellstack.org/ | sh
+
+RUN apt-get install -y libghc-postgresql-libpq-dev
+
+COPY ./ haskell-starter-kit/
+
+WORKDIR /haskell-starter-kit/
+RUN stack setup
+RUN stack build --test --no-run-tests --only-dependencies
+
+# Clean up files to avoid problems with files deleted in the project,
+# but remaining in the image, that would confuse 'stack build'.
+WORKDIR /
+RUN rm -rf /haskell-starter-kit
