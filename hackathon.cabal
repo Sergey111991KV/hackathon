@@ -26,10 +26,24 @@ source-repository head
 library
   exposed-modules:
       API
+      AppHandle
+      Config
+      Database
+      Database.Connection
+      Database.Setup
+      Database.Tables.User
+      Endpoints.GetUsers
+      Ext.Data.Aeson
+      Ext.Data.Env
+      Ext.Data.Time
+      Ext.Logger.Colog
+      Ext.Logger.Config
       Lib
+      Model.User
+      Server
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings
+  default-extensions: RecordWildCards OverloadedStrings FlexibleContexts FlexibleInstances ScopedTypeVariables ExplicitForAll TypeOperators DeriveGeneric
   ghc-options: -Wall -Werror
   build-depends:
       aeson
@@ -37,9 +51,11 @@ library
     , base64-bytestring
     , bytestring
     , co-log
+    , configurator
     , either
     , esqueleto
     , http-client
+    , http-client-tls
     , monad-logger
     , mtl
     , persistent
@@ -47,11 +63,19 @@ library
     , persistent-template
     , postgresql-simple
     , resource-pool
+    , resourcet
+    , safe-exceptions
     , servant-client
     , servant-options
     , servant-server
     , text
+    , time
+    , typerep-map
+    , unliftio
+    , unliftio-core
     , wai
+    , wai-cors
+    , wai-logger
     , warp
   default-language: Haskell2010
 
@@ -61,7 +85,7 @@ executable hackathon-exe
       Paths_hackathon
   hs-source-dirs:
       app
-  default-extensions: OverloadedStrings
+  default-extensions: RecordWildCards OverloadedStrings FlexibleContexts FlexibleInstances ScopedTypeVariables ExplicitForAll TypeOperators DeriveGeneric
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
@@ -69,10 +93,12 @@ executable hackathon-exe
     , base64-bytestring
     , bytestring
     , co-log
+    , configurator
     , either
     , esqueleto
     , hackathon
     , http-client
+    , http-client-tls
     , monad-logger
     , mtl
     , persistent
@@ -80,11 +106,19 @@ executable hackathon-exe
     , persistent-template
     , postgresql-simple
     , resource-pool
+    , resourcet
+    , safe-exceptions
     , servant-client
     , servant-options
     , servant-server
     , text
+    , time
+    , typerep-map
+    , unliftio
+    , unliftio-core
     , wai
+    , wai-cors
+    , wai-logger
     , warp
   default-language: Haskell2010
 
@@ -95,7 +129,7 @@ test-suite hackathon-test
       Paths_hackathon
   hs-source-dirs:
       test
-  default-extensions: OverloadedStrings
+  default-extensions: RecordWildCards OverloadedStrings FlexibleContexts FlexibleInstances ScopedTypeVariables ExplicitForAll TypeOperators DeriveGeneric
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
@@ -103,10 +137,12 @@ test-suite hackathon-test
     , base64-bytestring
     , bytestring
     , co-log
+    , configurator
     , either
     , esqueleto
     , hackathon
     , http-client
+    , http-client-tls
     , monad-logger
     , mtl
     , persistent
@@ -114,10 +150,18 @@ test-suite hackathon-test
     , persistent-template
     , postgresql-simple
     , resource-pool
+    , resourcet
+    , safe-exceptions
     , servant-client
     , servant-options
     , servant-server
     , text
+    , time
+    , typerep-map
+    , unliftio
+    , unliftio-core
     , wai
+    , wai-cors
+    , wai-logger
     , warp
   default-language: Haskell2010

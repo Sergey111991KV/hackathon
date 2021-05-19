@@ -1,32 +1,30 @@
 version: "3.3"
-
 services:
   db:
     image: postgres:latest
-    container_name: hackathon_db
+    container_name: hackaton_db
     environment:
-      - POSTGRES_DB=hackathon_dev
-      - POSTGRES_USER=hackathon_user
-      - POSTGRES_PASSWORD=hackathon_pass
+       - POSTGRES_USER=myuser
+       - POSTGRES_PASSWORD=mypass
+       - POSTGRES_DB=appnamedb
+       - POSTGRES_HOST_AUTH_METHOD=md5
     ports:
-      - 5431:5432
+      - 5432:5432
     volumes:
       - pg-data:/var/lib/postgresql/data
 
   backend:
-    depends_on:
-      - db
-    image: hackathon/project:latest
-    build:
-      context: ./
-    environment:
-      - DB_HOST
-      - DB_PORT
-      - DB_NAME
-      - DB_USER
-      - DB_PASS
-    ports:
-      - 8080:8080
-
+     depends_on:
+       - db
+     image: starter:latest
+     build:
+       context: ./
+     environment:
+       - POSTGRES_DB
+       - POSTGRES_USER
+       - POSTGRES_PASSWORD
+       - DB_HOST
+     ports:
+       - 8080:8080
 volumes:
-  pg-data:
+    pg-data:

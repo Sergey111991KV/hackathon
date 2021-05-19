@@ -26,11 +26,19 @@ dependencies:
 - base64-bytestring
 - text
 - either
-
+- time
+- unliftio-core
+- unliftio
+- safe-exceptions
+- configurator
+- resourcet
+- text
 
 # Logger
 - co-log
 - monad-logger
+- time
+- typerep-map
 
 # Database
 - postgresql-simple
@@ -48,9 +56,19 @@ dependencies:
 - servant-client
 - servant-options
 - servant-server
+- wai-logger
+- wai-cors
+- http-client-tls
 
 default-extensions:
+- RecordWildCards
 - OverloadedStrings
+- FlexibleContexts
+- FlexibleInstances 
+- ScopedTypeVariables 
+- ExplicitForAll
+- TypeOperators
+- DeriveGeneric
 
 library:
   when:

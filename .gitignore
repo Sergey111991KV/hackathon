@@ -1,2 +1,5 @@
 .stack-work/
 *~
+stack.yaml.lock
+local.*.conf
+local.conf
