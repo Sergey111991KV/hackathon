@@ -9,12 +9,12 @@ where
 import qualified Config as C
 import Database (withDbPool)
 import Control.Monad.IO.Class (liftIO)
-import Control.Monad.IO.Unlift (MonadIO)
+
 import Control.Monad.Logger (NoLoggingT)
 import Data.Pool (Pool)
-import qualified Data.Text as T
+
 import Database.Persist.Sql (SqlBackend)
-import Ext.Data.Env (Env)
+
 import Ext.Logger.Config (LoggerConfig)
 
 data AppHandle = AppHandle

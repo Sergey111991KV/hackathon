@@ -10,10 +10,17 @@ import Database.Tables.User as Exports
 import qualified Config as C
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Database.Persist.Postgresql
+import  Database.Tables.Transaction  as Exports
+
+allMigrations :: [Migration]
+allMigrations =
+  [ migrateUser,
+    migrateTransaction
+  ]
 
 
 migrateAll :: (MonadIO m) => SqlPersistT m ()
-migrateAll = runMigration migrateUser
+migrateAll = mapM_ runMigration allMigrations
 
 runAllMigrations :: IO ()
 runAllMigrations = do

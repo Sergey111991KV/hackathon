@@ -11,11 +11,11 @@ import Database
      loadUserById,
    )
 import Model.User (UserSerializer (..))
-import Control.Exception.Safe (MonadThrow, throw)
+import Control.Exception.Safe (MonadThrow)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Database.Persist.Postgresql
-import qualified Database.Persist.Postgresql as P
-import Servant (err404)
+-- import qualified Database.Persist.Postgresql as P
+-- import Servant (err404)
 
 getUserByIdEndpoint ::
    (MonadIO m, MonadThrow m) => AppHandle -> Int -> m (Maybe UserSerializer)

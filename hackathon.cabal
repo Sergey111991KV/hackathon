@@ -31,14 +31,28 @@ library
       Database
       Database.Connection
       Database.Setup
+      Database.Tables.Achievements
+      Database.Tables.Events
+      Database.Tables.PaidToken
+      Database.Tables.Partners
+      Database.Tables.Subscriptions
+      Database.Tables.Token
+      Database.Tables.Transaction
       Database.Tables.User
+      Endpoints.Events
       Endpoints.GetUsers
+      Endpoints.Token
       Ext.Data.Aeson
       Ext.Data.Env
       Ext.Data.Time
+      Ext.HTTP.Client
+      Ext.HTTP.Error
+      Ext.HTTP.Response
       Ext.Logger.Colog
       Ext.Logger.Config
       Lib
+      Model.Achievements
+      Model.City
       Model.User
       Server
   hs-source-dirs:
@@ -57,6 +71,7 @@ library
     , haskell-postgis
     , http-client
     , http-client-tls
+    , lens
     , monad-logger
     , mtl
     , persistent
@@ -101,6 +116,7 @@ executable hackathon-exe
     , haskell-postgis
     , http-client
     , http-client-tls
+    , lens
     , monad-logger
     , mtl
     , persistent
@@ -146,6 +162,7 @@ test-suite hackathon-test
     , haskell-postgis
     , http-client
     , http-client-tls
+    , lens
     , monad-logger
     , mtl
     , persistent

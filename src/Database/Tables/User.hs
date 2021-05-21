@@ -20,28 +20,14 @@ import Data.Maybe (listToMaybe)
 import qualified Data.Text as T
 import qualified Data.Time as Time
 import Database.Esqueleto
-  ( Entity,
-    PersistValue (PersistInt64),
-    SqlPersistT,
-    entityKey,
-    entityVal,
-    from,
-    fromSqlKey,
-    insert,
-    rawSql,
-    select,
-    toSqlKey,
-    val,
-    where_,
-    (==.),
-    (^.),
-  )
+ 
 import qualified Database.Persist.Postgresql as P
 import Database.Persist.TH
-import Database.PostgreSQL.Simple ()-- (SqlError (..))
-import qualified Data.Text as T ()
-import qualified Data.Time as Time ()
-import UnliftIO.Exception ()
+
+
+import Model.City
+-- import Model.Achievements
+
 
 share
   [mkPersist sqlSettings, mkMigrate "migrateUser"]
@@ -49,26 +35,36 @@ share
  User
      createdAt Time.UTCTime
      phone T.Text
+     nativeCity City
      firstName T.Text
      secondName T.Text
+     age Int
+     achievements [Int]
+     bonusBill Int
      deriving Show
  |]
 
 createUserRecord ::
   (MonadUnliftIO m) =>
   T.Text ->
-    T.Text ->
-      T.Text ->
+  City ->
+  T.Text ->
+  T.Text ->
+  Int ->
   SqlPersistT m (P.Key User, Time.UTCTime)
-createUserRecord phone fstName sndName = do
+createUserRecord phone city fstName sndName age = do
   now <- liftIO Time.getCurrentTime
   rowOrderId <-
     insert $
       User
         now
         phone
+        city
         fstName
         sndName
+        age
+        []
+        0
   pure (rowOrderId, now)
 
 loadUserById ::
@@ -80,3 +76,23 @@ loadUserById userId =
     from $ \user -> do
       where_ $ user ^. UserId ==. val userId
       pure user
+
+updateBonusBill ::
+  MonadUnliftIO m =>
+  P.Key User ->
+  Int ->
+  SqlPersistT m ()
+updateBonusBill keyUser bonusBill = do
+  update $ \user -> do
+    set user [UserBonusBill =. val bonusBill]
+    where_ $ user ^. UserId ==. val keyUser
+
+updateUserAchievements ::
+  MonadUnliftIO m =>
+  P.Key User ->
+  [Int] ->
+  SqlPersistT m ()
+updateUserAchievements keyUser bonusBill = do
+  update $ \user -> do
+    set user [UserAchievements =. val bonusBill]
+    where_ $ user ^. UserId ==. val keyUser

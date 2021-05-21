@@ -6,14 +6,11 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import qualified Data.Configurator as C
 import qualified Data.Configurator.Types as C
 import Data.Maybe (fromMaybe)
-import qualified Data.Text as T
-import qualified Data.Time as Time
-import Database.Persist.Postgresql (SqlPersistT)
-import Ext.Data.Env (Env (..))
+
 import Ext.Logger.Colog (Severity (Debug))
 import Ext.Logger.Config (LoggerConfig (..))
 import Text.Read (readMaybe)
-import UnliftIO.Exception (throwString)
+
 
 type Config = C.Config
 

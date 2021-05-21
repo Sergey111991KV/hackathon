@@ -8,28 +8,18 @@
  import API (API, apiType)
  import AppHandle (AppHandle (..), withAppHandle)
  import qualified Config as C
- import Database (withDbPool, withDbPoolDebug)
+
  import Endpoints.GetUsers
    ( getUserByIdEndpoint,
    )
- import Control.Exception.Safe (MonadThrow, throw, try)
- import Control.Monad (unless)
+ import Control.Exception.Safe (MonadThrow, try)
+
  import Control.Monad.Except (ExceptT (ExceptT))
  import Control.Monad.IO.Class (MonadIO, liftIO)
- import qualified Data.Pool as Pool
- import Data.Proxy (Proxy (Proxy))
- import Database.Persist.Sql (SqlBackend)
- import Ext.Data.Env (Env (..))
- import Ext.Logger.Colog (logTextStdout)
+
  import Network.Wai.Handler.Warp
-   ( Settings,
-     defaultSettings,
-     runSettings,
-     setBeforeMainLoop,
-     setLogger,
-     setPort,
-   )
- import Network.Wai.Logger (withStdoutLogger)
+
+
  import Network.Wai.Middleware.Cors
    ( cors,
      corsRequestHeaders,
@@ -37,15 +27,7 @@
    )
  import Network.Wai.Middleware.Servant.Options (provideOptions)
  import Servant
-   ( Handler (Handler),
-     Server,
-     ServerT,
-     err404,
-     hoistServer,
-     serve,
-     serveWithContext,
-     (:<|>) (..),
-   )
+
 
  handler ::
    (MonadIO m, MonadThrow m) =>

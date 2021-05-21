@@ -33,6 +33,7 @@ dependencies:
 - configurator
 - resourcet
 - text
+- lens
 
 # Logger
 - co-log
