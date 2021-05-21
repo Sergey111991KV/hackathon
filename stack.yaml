@@ -37,6 +37,7 @@ packages:
 #
 extra-deps:
   - servant-options-0.1.0.0
+  - haskell-postgis-0.2.0
   # - servant-auth-0.4.0.0
   # - servant-auth-server-0.4.6.0
   # - servant-auth-client-0.4.1.0

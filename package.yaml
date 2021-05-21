@@ -59,6 +59,7 @@ dependencies:
 - wai-logger
 - wai-cors
 - http-client-tls
+- haskell-postgis
 
 default-extensions:
 - RecordWildCards

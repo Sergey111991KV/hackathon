@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   db:
-    image: postgres:latest
+    image: postgis/postgis
     container_name: hackaton_db
     environment:
        - POSTGRES_USER=myuser
@@ -11,7 +11,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - pg-data:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgis/data
 
   backend:
      depends_on:
@@ -28,3 +28,4 @@ services:
        - 8080:8080
 volumes:
     pg-data:
+     
