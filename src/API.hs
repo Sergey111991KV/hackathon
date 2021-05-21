@@ -11,15 +11,19 @@ module API
 import Model.User (UserSerializer)
 import Data.Proxy (Proxy (..))
 import qualified Data.Text as T
-import Servant (Capture, Get, JSON, (:<|>) (..), (:>))
-
+import Servant 
+import API.PlaidToken
+import qualified Ext.HTTP.Response as Web
 -- data TestResponse = TestResponse
 --    { responseStatus :: Bool,
 --      responseText :: T.Text
 --    }
 
-type API =
-   "test-endpoint-with" :> Capture "echotext" T.Text :> Get '[JSON] T.Text :<|> "get-user-by-id" :> Capture "userId" Int :> Get '[JSON] (Maybe UserSerializer)
+type API = 
+  PlaidTokenAPI
+  --  "test-endpoint-with" :> Capture "echotext" T.Text :> Get '[JSON] T.Text 
+  --   :<|> "get-user-by-id" :> Capture "userId" Int :> Get '[JSON] (Maybe UserSerializer)
+  --   :<|> "send" :> Capture "userId" Int :> Capture "userId" T.Text :>  Get '[JSON] (Web.WebApiHttpResponse ())
 
 apiType :: Proxy API
 apiType = Proxy

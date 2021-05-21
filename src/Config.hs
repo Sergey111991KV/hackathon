@@ -1,3 +1,7 @@
+{-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE ImplicitParams #-}
+{-# LANGUAGE RankNTypes #-}
+
 module Config
   
 where
@@ -10,9 +14,17 @@ import Data.Maybe (fromMaybe)
 import Ext.Logger.Colog (Severity (Debug))
 import Ext.Logger.Config (LoggerConfig (..))
 import Text.Read (readMaybe)
+import qualified Servant.Auth.Server as SAS
 
-
+type GetConfig cfg = forall m. MonadIO m => C.Config -> m cfg
 type Config = C.Config
+
+getJWTSettings :: GetConfig SAS.JWTSettings
+getJWTSettings config = do
+  filePath <- getKeysFilePath config
+  authKey <- liftIO $ SAS.readKey filePath
+  pure $ SAS.defaultJWTSettings authKey
+
 
 retrieveConfig :: MonadIO m => m C.Config
 retrieveConfig = do

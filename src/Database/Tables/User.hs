@@ -20,6 +20,18 @@ import Data.Maybe (listToMaybe)
 import qualified Data.Text as T
 import qualified Data.Time as Time
 import Database.Esqueleto
+    ( (=.),
+      (==.),
+      (^.),
+      from,
+      select,
+      set,
+      update,
+      val,
+      where_,
+      BackendKey(SqlBackendKey),
+      PersistStoreWrite(insert),
+      SqlPersistT )
  
 import qualified Database.Persist.Postgresql as P
 import Database.Persist.TH
@@ -40,6 +52,7 @@ share
      secondName T.Text
      age Int
      achievements [Int]
+     bill Int
      bonusBill Int
      deriving Show
  |]
@@ -65,6 +78,7 @@ createUserRecord phone city fstName sndName age = do
         age
         []
         0
+        0
   pure (rowOrderId, now)
 
 loadUserById ::
@@ -77,12 +91,12 @@ loadUserById userId =
       where_ $ user ^. UserId ==. val userId
       pure user
 
-updateBonusBill ::
+updateUserBonusBill ::
   MonadUnliftIO m =>
   P.Key User ->
   Int ->
   SqlPersistT m ()
-updateBonusBill keyUser bonusBill = do
+updateUserBonusBill keyUser bonusBill = do
   update $ \user -> do
     set user [UserBonusBill =. val bonusBill]
     where_ $ user ^. UserId ==. val keyUser
@@ -95,4 +109,14 @@ updateUserAchievements ::
 updateUserAchievements keyUser bonusBill = do
   update $ \user -> do
     set user [UserAchievements =. val bonusBill]
+    where_ $ user ^. UserId ==. val keyUser
+
+updateUserBill ::
+  MonadUnliftIO m =>
+  P.Key User ->
+  Int ->
+  SqlPersistT m ()
+updateUserBill keyUser bill = do
+  update $ \user -> do
+    set user [UserBill =. val bill]
     where_ $ user ^. UserId ==. val keyUser

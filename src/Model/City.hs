@@ -8,7 +8,7 @@ module Model.City where
 -- import qualified Ext.Data.Aeson as J
 -- import GHC.Generics (Generic)
 
-import Database.Persist.TH
+import Database.Persist.TH ( derivePersistField )
  
 data City = Novorossiysk | Other
    deriving (Show, Read, Eq)

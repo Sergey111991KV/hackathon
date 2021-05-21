@@ -27,16 +27,14 @@
    )
  import Network.Wai.Middleware.Servant.Options (provideOptions)
  import Servant
-
+ import Endpoints.PlaidToken
 
  handler ::
    (MonadIO m, MonadThrow m) =>
    AppHandle ->
    ServerT API m
- handler h = testEndpoint :<|> getUserByIdEndpoint h
-   where
-     testEndpoint param =
-       pure $ "You sent me " <> param
+ handler h = getPaidTokenEndpoint h :<|> sendPaidTokenEndpoint h
+  
 
  catchServantErrorsFromIO :: ServerT API IO -> Server API
  catchServantErrorsFromIO = hoistServer apiType (Handler . ExceptT . try)

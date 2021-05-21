@@ -26,7 +26,9 @@ source-repository head
 library
   exposed-modules:
       API
+      API.PlaidToken
       AppHandle
+      Auth
       Config
       Database
       Database.Connection
@@ -39,9 +41,11 @@ library
       Database.Tables.Token
       Database.Tables.Transaction
       Database.Tables.User
+      Database.Tables.UserEvents
+      Database.Tables.UserSubsriptions
       Endpoints.Events
       Endpoints.GetUsers
-      Endpoints.Token
+      Endpoints.PlaidToken
       Ext.Data.Aeson
       Ext.Data.Env
       Ext.Data.Time
@@ -53,8 +57,11 @@ library
       Lib
       Model.Achievements
       Model.City
+      Model.PlaidTokenRequest
+      Model.TypePaidAction
       Model.User
       Server
+      Utils.CryptoRandomGen
   hs-source-dirs:
       src
   default-extensions: RecordWildCards OverloadedStrings FlexibleContexts FlexibleInstances ScopedTypeVariables ExplicitForAll TypeOperators DeriveGeneric
@@ -63,14 +70,17 @@ library
       aeson
     , base >=4.7 && <5
     , base64-bytestring
+    , basement
     , bytestring
     , co-log
     , configurator
+    , cryptonite
     , either
     , esqueleto
     , haskell-postgis
     , http-client
     , http-client-tls
+    , jose
     , lens
     , monad-logger
     , mtl
@@ -78,9 +88,13 @@ library
     , persistent-postgresql
     , persistent-template
     , postgresql-simple
+    , random
     , resource-pool
     , resourcet
     , safe-exceptions
+    , servant-auth
+    , servant-auth-client
+    , servant-auth-server
     , servant-client
     , servant-options
     , servant-server
@@ -107,15 +121,18 @@ executable hackathon-exe
       aeson
     , base >=4.7 && <5
     , base64-bytestring
+    , basement
     , bytestring
     , co-log
     , configurator
+    , cryptonite
     , either
     , esqueleto
     , hackathon
     , haskell-postgis
     , http-client
     , http-client-tls
+    , jose
     , lens
     , monad-logger
     , mtl
@@ -123,9 +140,13 @@ executable hackathon-exe
     , persistent-postgresql
     , persistent-template
     , postgresql-simple
+    , random
     , resource-pool
     , resourcet
     , safe-exceptions
+    , servant-auth
+    , servant-auth-client
+    , servant-auth-server
     , servant-client
     , servant-options
     , servant-server
@@ -153,15 +174,18 @@ test-suite hackathon-test
       aeson
     , base >=4.7 && <5
     , base64-bytestring
+    , basement
     , bytestring
     , co-log
     , configurator
+    , cryptonite
     , either
     , esqueleto
     , hackathon
     , haskell-postgis
     , http-client
     , http-client-tls
+    , jose
     , lens
     , monad-logger
     , mtl
@@ -169,9 +193,13 @@ test-suite hackathon-test
     , persistent-postgresql
     , persistent-template
     , postgresql-simple
+    , random
     , resource-pool
     , resourcet
     , safe-exceptions
+    , servant-auth
+    , servant-auth-client
+    , servant-auth-server
     , servant-client
     , servant-options
     , servant-server

@@ -34,6 +34,9 @@ dependencies:
 - resourcet
 - text
 - lens
+- random
+- basement
+- cryptonite
 
 # Logger
 - co-log
@@ -50,6 +53,7 @@ dependencies:
 - resource-pool
 
 # Web
+- jose
 - aeson
 - wai
 - warp
@@ -57,6 +61,9 @@ dependencies:
 - servant-client
 - servant-options
 - servant-server
+- servant-auth
+- servant-auth-server
+- servant-auth-client
 - wai-logger
 - wai-cors
 - http-client-tls
