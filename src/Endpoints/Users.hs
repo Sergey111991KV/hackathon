@@ -1,8 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Endpoints.GetUsers
-   ( getUserByIdEndpoint,
-   )
+module Endpoints.Users
+  
  where
 import AppHandle (AppHandle (..))
 import Database
@@ -31,3 +30,7 @@ getUserByIdEndpoint AppHandle {..} userId =
                userCreatedAt = userCreatedAt,
                userPhone = userPhone
              }
+  
+saveUserEndpoint ::
+   (MonadIO m, MonadThrow m) => AppHandle -> UserSerializer -> m ()
+saveUserEndpoint = undefined 

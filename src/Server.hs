@@ -9,9 +9,8 @@
  import AppHandle (AppHandle (..), withAppHandle)
  import qualified Config as C
 
- import Endpoints.GetUsers
-   ( getUserByIdEndpoint,
-   )
+ import Endpoints.Users
+
  import Control.Exception.Safe (MonadThrow, try)
 
  import Control.Monad.Except (ExceptT (ExceptT))
@@ -33,8 +32,12 @@
    (MonadIO m, MonadThrow m) =>
    AppHandle ->
    ServerT API m
- handler h = getPaidTokenEndpoint h :<|> sendPaidTokenEndpoint h
-  
+ handler h = paidToken :<|> user
+  where
+    paidToken = getPaidTokenEndpoint h 
+            :<|> sendPaidTokenEndpoint h
+    user = getUserByIdEndpoint h
+            :<|> saveUserEndpoint h
 
  catchServantErrorsFromIO :: ServerT API IO -> Server API
  catchServantErrorsFromIO = hoistServer apiType (Handler . ExceptT . try)

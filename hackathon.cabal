@@ -27,6 +27,7 @@ library
   exposed-modules:
       API
       API.PlaidToken
+      API.User
       AppHandle
       Auth
       Config
@@ -44,8 +45,8 @@ library
       Database.Tables.UserEvents
       Database.Tables.UserSubsriptions
       Endpoints.Events
-      Endpoints.GetUsers
       Endpoints.PlaidToken
+      Endpoints.Users
       Ext.Data.Aeson
       Ext.Data.Env
       Ext.Data.Time

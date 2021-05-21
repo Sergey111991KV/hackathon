@@ -6,7 +6,7 @@ module Model.User
  import qualified Data.Aeson as J
  import qualified Data.Text as T
  import qualified Data.Time as Time
- import qualified Ext.Data.Aeson as J
+--  import qualified Ext.Data.Aeson as J
  import GHC.Generics (Generic)
 
  data UserSerializer = UserSerializer
@@ -17,4 +17,7 @@ module Model.User
    deriving (Show, Eq, Generic)
 
  instance J.ToJSON UserSerializer where
-   toJSON = J.droppedPrefixDecode
+  --  toJSON = J.droppedPrefixDecode
+
+ instance J.FromJSON UserSerializer where
+  --  toJSON = J.droppedPrefixDecode

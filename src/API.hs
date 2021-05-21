@@ -18,9 +18,11 @@ import qualified Ext.HTTP.Response as Web
 --    { responseStatus :: Bool,
 --      responseText :: T.Text
 --    }
+import API.User
+
 
 type API = 
-  PlaidTokenAPI
+  PlaidTokenAPI :<|> UserAPI 
   --  "test-endpoint-with" :> Capture "echotext" T.Text :> Get '[JSON] T.Text 
   --   :<|> "get-user-by-id" :> Capture "userId" Int :> Get '[JSON] (Maybe UserSerializer)
   --   :<|> "send" :> Capture "userId" Int :> Capture "userId" T.Text :>  Get '[JSON] (Web.WebApiHttpResponse ())
