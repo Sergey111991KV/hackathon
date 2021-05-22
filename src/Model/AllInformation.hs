@@ -1,29 +1,20 @@
-module Model.AllInformation
-
-where
+module Model.AllInformation where
 
 import qualified Data.Aeson as J
-import qualified Data.Text as T
 import GHC.Generics (Generic)
-import  Model.UserSerializer
-
-
-import Model.UserSubsriptions
+import Model.Transaction
 import Model.UserEvents
+import Model.UserSerializer
+import Model.UserSubsriptions
 
-
-
-data AllInformation = AllInformation {
-    user :: UserSerializer,
-    transaction :: Maybe [T.Text],
-    userEvents :: UserEvents,
-    userSubsriptions :: UserSubsriptions
-}
+data AllInformation = AllInformation
+  { user :: UserSerializer,
+    transaction :: [Transaction],
+    userEvents :: [UserEvents],
+    userSubsriptions :: [UserSubsriptions]
+  }
   deriving (Show, Eq, Generic)
 
 instance J.ToJSON AllInformation
 
-
-
 instance J.FromJSON AllInformation
-

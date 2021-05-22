@@ -18,7 +18,7 @@ import API.User ( UserAPI )
 
 
 type API = 
-  PlaidTokenAPI :<|> UserAPI :<|> TokenAPI :<|> EventsAPI
+  PlaidTokenAPI :<|> UserAPI :<|> TokenAPI :<|> EventsAPI 
  
 
 apiType :: Proxy API

@@ -17,6 +17,9 @@ import Database.Tables.Events
 import Database.Tables.PaidToken 
 import Database.Tables.Partners 
 import Database.Tables.Token
+import Database.Tables.UserEvent
+import Database.Tables.UserSubsription
+
 
 
 
@@ -29,7 +32,9 @@ allMigrations =
     migrateSubscriptions,
     migratePartners,
     migratePaidToken,
-    migrateToken
+    migrateToken,
+    migrateUserEvent,
+    migrateUserSubsription
   ]
 
 

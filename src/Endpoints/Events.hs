@@ -9,6 +9,7 @@ import Database.Persist.Postgresql
 import qualified Database.Tables.Events as E
 import qualified Database.Persist.Postgresql as P
 import Model.Events 
+
 -- import Model.AllInformation
 
 getAllEventsEndpoint ::  (MonadIO m, MonadThrow m) =>  AppHandle -> m [Events]

@@ -64,3 +64,11 @@ createTransaction CreateTransaction {..} = do
         toId
         amount
   pure (rowOrderId, now)
+
+loadAllTransaction :: MonadUnliftIO m =>
+  Int ->
+  SqlPersistT m  [P.Entity Transaction]
+loadAllTransaction  userId = 
+   select $ from $ \transaction -> do
+    where_ (transaction ^. TransactionUserId ==. val userId)
+    pure transaction
