@@ -120,7 +120,8 @@ example:
     }
  
     Response: 
-{
+
+    {
     "typeE": "Спортивные мероприятия",
     "prizeTrirdCategoriesE": 30,
     "dateEventsStartE": "2021-05-22",
@@ -134,4 +135,4 @@ example:
     "urlE": "novorossiys/futboll-club",
     "dateEventsEndE": "2021-06-22",
     "prizeSecondTypeE": "Футболки с подпсисями команды"
-}
+    }
