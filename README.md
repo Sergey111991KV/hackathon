@@ -90,6 +90,55 @@ example:
 
 Этот эндпоинт выводит информацию о пользователе, о всех его транзакциях и всех мероприятиях(Events) или подписках(Subsriptions) на которых он был когда либо. Включает в себя призы и подарки.
 
+example:
+
+    Request:
+
+    {
+    "success": true,
+    "result": {
+        "userEvents": [
+            {
+                "idEvents": 1,
+                "endDate": "2021-06-22",
+                "reatedAt": "2021-05-22T14:20:51.48677Z",
+                "userId": 1
+            }
+        ],
+        "user": {
+            "phone": "34567890123",
+            "createdAt": "2021-05-22T14:17:45.820602Z",
+            "age": 22,
+            "bill": 800,
+            "bonusBill": 810,
+            "nativeCity": "Novorossiysk",
+            "isOrganization": null,
+            "userId": 1,
+            "achievements": [
+                "Travel",
+                "CityActivities"
+            ],
+            "secondName": "Ivanov",
+            "firstName": "Igor",
+            "interests": [
+                "Food",
+                "Art"
+            ]
+        },
+        "transaction": [
+            {
+                "amount": 200,
+                "createdAt": "2021-05-22T14:20:51.491828Z",
+                "fromId": 1,
+                "toId": 1,
+                "userId": 1,
+                "transactionToIdType": "Events"
+            }
+        ],
+        "userSubsriptions": []
+        }
+    }
+
 ## Events
 
 Это эндпоинты по создание и получению мероприятий
