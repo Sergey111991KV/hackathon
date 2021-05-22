@@ -27,17 +27,20 @@
  import Network.Wai.Middleware.Servant.Options (provideOptions)
  import Servant
  import Endpoints.PlaidToken
+ import Endpoints.Token 
 
  handler ::
    (MonadIO m, MonadThrow m) =>
    AppHandle ->
    ServerT API m
- handler h = paidToken :<|> user
+ handler h = paidToken :<|> user :<|> token
   where
     paidToken = getPaidTokenEndpoint h 
             :<|> sendPaidTokenEndpoint h
     user = getUserByIdEndpoint h
             :<|> saveUserEndpoint h
+    token = exchangeTokenEndpoint h 
+            :<|> deactivateTokenEndpoint h
 
  catchServantErrorsFromIO :: ServerT API IO -> Server API
  catchServantErrorsFromIO = hoistServer apiType (Handler . ExceptT . try)

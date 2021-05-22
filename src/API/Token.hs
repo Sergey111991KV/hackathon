@@ -21,6 +21,6 @@ import Model.TokenRequest
 
 type TokenAPI = "token" :> (GetToken :<|> SendToken)
 
-type GetToken = "get" :> ReqBody '[JSON] ChangePlaidToken:> Get '[JSON] (Web.WebApiHttpResponse  UserToken)
+type GetToken = "exchange" :> ReqBody '[JSON] ChangePlaidToken:> Get '[JSON] (Web.WebApiHttpResponse  UserToken)
 
-type SendToken = "send" :> ReqBody  '[JSON] DeactivateUserToken :>  Post '[JSON] (Web.WebApiHttpResponse ())
+type SendToken = "deactivate" :> ReqBody  '[JSON] UserToken :>  Post '[JSON] (Web.WebApiHttpResponse ())

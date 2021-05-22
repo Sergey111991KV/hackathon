@@ -13,6 +13,8 @@ module API
 -- import qualified Data.Text as T
 import Servant 
 import API.PlaidToken ( PlaidTokenAPI )
+import API.Token
+  
 -- import qualified Ext.HTTP.Response as Web
 -- data TestResponse = TestResponse
 --    { responseStatus :: Bool,
@@ -22,7 +24,7 @@ import API.User ( UserAPI )
 
 
 type API = 
-  PlaidTokenAPI :<|> UserAPI 
+  PlaidTokenAPI :<|> UserAPI :<|> TokenAPI
   --  "test-endpoint-with" :> Capture "echotext" T.Text :> Get '[JSON] T.Text 
   --   :<|> "get-user-by-id" :> Capture "userId" Int :> Get '[JSON] (Maybe UserSerializer)
   --   :<|> "send" :> Capture "userId" Int :> Capture "userId" T.Text :>  Get '[JSON] (Web.WebApiHttpResponse ())

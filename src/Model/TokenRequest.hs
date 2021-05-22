@@ -16,14 +16,6 @@ instance J.ToJSON ChangePlaidToken
 
 instance J.FromJSON ChangePlaidToken
 
-data DeactivateUserToken = DeactivateUserToken {
-    token :: T.Text
-}
-  deriving (Show, Eq, Generic)
-
-instance J.ToJSON DeactivateUserToken
-
-instance J.FromJSON DeactivateUserToken
 
 data UserToken = UserToken {
     userToken :: T.Text,
