@@ -2,7 +2,7 @@
 
 ## USER
 
-### GET user/get/:id -> UserSerializer
+### GET user/get/:id -> JSON UserSerializer
 
 example:
 
@@ -28,13 +28,13 @@ example:
                 ]
         }
 
-### POST user/save  JSON UserCreation ()
+### POST user/save  JSON UserCreation -> ()
 
 Стандартные эндпоинты создания и получения пользователя (UserSerializer)
 
 ## Plaid-Token
 
-### Get plaid-token/get JSON PlaidTokenGet  -> PlaidToken
+### Get plaid-token/get JSON PlaidTokenGet  -> JSON PlaidToken
 
 Получение Токена или генерация токена для оплаты. Для его получения мы отправляем объект с данными о подключаемой(покупаемой) услуги: Events (какие либо события, временные) и Subscriptions (подписки на проезд). QR код получается может быть статическим, но мы на сервере будем проверять его актуальность, точнее токена, который генерируется для QR кода.
 
@@ -59,7 +59,7 @@ example:
 
 ## User-Token
 
-###  Get token/exchange JSON ChangePlaidToken -> UserToken
+###  Get token/exchange JSON ChangePlaidToken -> JSON UserToken
 
 Здесь мы на основании токена-оплаты получаем токен-подтверждение от пользователя, который является подтверждением списания денег со счета пользователя и покупки той или иной услуги или же просто подтверждает о наличии купленной услуги. Он будет иметь свой срок действия, который потом вынесем в конфиги
 
@@ -79,10 +79,59 @@ example:
             "userToken": "eedc540e18add23bd5b951f36cf52e87c8138c77fff6b710a5aa3457f736"
         }
 
-###  Post token/deactivate JSON UserToken ()
+###  Post token/deactivate JSON UserToken -> ()
 
 Этот эндпоинт для владельцев бизнеса и организаторов. Отправка UserToken на него делает этот токен больше не пригодным для списания.
 
 
+## All-User-Information
 
+### Get /user/all-information/:id  -> JSON AllInformation
 
+Этот эндпоинт выводит информацию о пользователе, о всех его транзакциях и всех мероприятиях(Events) или подписках(Subsriptions) на которых он был когда либо. Включает в себя призы и подарки.
+
+## Events
+
+Это эндпоинты по создание и получению мероприятий
+
+### events/getOne/:id  -> Events
+
+### events/save JSON EventsCreation -> ()
+
+### events/getAll -> JSON [Events]
+
+example:
+
+    Request:
+
+    {
+    "creationName" : "Финальный матч",
+    "creationType" : "Спортивные мероприятия",
+    "creationUrl" : "novorossiys/futboll-club",
+    "creationDateEventsStart" : "2021-05-22",
+    "creationDateEventsEnd" : "2021-06-22",
+    "creationPrizeFirstType" : "Билет на Финал на Городском стадионе",
+    "creationPrizeFirstCategories" : 1,
+    "creationPrizeSecondType" : "Футболки с подпсисями команды",
+    "creationPrizeSecondCategories" : 5,
+    "creationPrizeTrirdType" : "Футбольный мяч",
+    "creationPrizeTrirdCategories" : 30,
+    "creationPrice" : 200
+    }
+ 
+    Response: 
+{
+    "typeE": "Спортивные мероприятия",
+    "prizeTrirdCategoriesE": 30,
+    "dateEventsStartE": "2021-05-22",
+    "prizeSecondCategoriesE": 5,
+    "nameE": "Финальный матч",
+    "createdE": "2021-05-22T14:37:20.655198Z",
+    "prizeFirstCategoriesE": 1,
+    "prizeTrirdTypeE": "Футбольный мяч",
+    "priceE": 200,
+    "prizeFirstTypeE": "Билет на Финал на Городском стадионе",
+    "urlE": "novorossiys/futboll-club",
+    "dateEventsEndE": "2021-06-22",
+    "prizeSecondTypeE": "Футболки с подпсисями команды"
+}
