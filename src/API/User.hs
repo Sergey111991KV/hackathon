@@ -8,10 +8,12 @@ import Model.UserSerializer (UserSerializer)
 import Servant
 import  Model.AllInformation
 
-type UserAPI = "user" :> (GetUser :<|> SaveUser)
+import qualified Ext.HTTP.Response as Web
+
+type UserAPI = "user" :> (GetUser :<|> SaveUser :<|> UserAllInformation)
 
 type GetUser = "get" :> Capture "id" Int :> Get '[JSON] (Maybe UserSerializer)
 
 type SaveUser = "save" :> ReqBody '[JSON] UserCreation :> Post '[JSON] ()
 
-type UserAllInformation = "all-information" :> Capture "id" Int :> Get '[JSON] AllInformation
+type UserAllInformation = "all-information" :> Capture "id" Int :> Get '[JSON] (Web.WebApiHttpResponse AllInformation) 

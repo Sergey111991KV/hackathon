@@ -82,11 +82,30 @@ mapUser entity =
             }
 
 mapTransaction :: Entity DB.Transaction  -> Transaction
-mapTransaction = 
-  undefined 
+mapTransaction (Entity _ DB.Transaction {..}) = 
+   Transaction 
+    { userId = transactionUserId,
+      createdAt = transactionCreatedAt,
+      fromId = transactionUserId,
+      toId = transactionToId,
+      amount = transactionAmount,
+      transactionToIdType = transactionToIdType
+    }
 
 mapEvents :: Entity DB.UserEvent  -> UserEvents
-mapEvents = undefined 
+mapEvents (Entity _ DB.UserEvent{..}) =  
+  UserEvents  
+    { 
+      reatedAt = userEventCreatedAt,
+      idEvents = userEventIdEvents,
+      userId = userEventUserId,
+      endDate = userEventEndDate
+    }
 
 mapSubsriptions :: Entity DB.UserSubsription  -> UserSubsriptions
-mapSubsriptions = undefined 
+mapSubsriptions (Entity _ DB.UserSubsription {..}) =  
+  UserSubsriptions 
+  { reatedAt = userSubsriptionCreatedAt,
+    idEvents = userSubsriptionIdEvents,
+    userId = userSubsriptionUserId
+  }

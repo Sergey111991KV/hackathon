@@ -8,7 +8,7 @@ data UserEvents = UserEvents
   { reatedAt :: Time.UTCTime,
     idEvents :: Int,
     userId :: Int,
-    endDate :: Time.UTCTime
+    endDate :: Time.Day
   }
   deriving (Show, Eq, Generic)
 
