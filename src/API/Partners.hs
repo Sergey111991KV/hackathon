@@ -6,7 +6,6 @@ module API.Partners where
 import qualified Data.Text as T
 import Database.Tables.Events
 import qualified Ext.HTTP.Response as Web
-import Model.PlaidTokenRequest
 import Servant
 
 type PartnersAPI = "Partners" :> (GetPartnersToken :<|> SendPartnersToken)

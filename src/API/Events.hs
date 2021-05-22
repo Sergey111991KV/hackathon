@@ -11,7 +11,6 @@ module API.Events
 import qualified Data.Text as T
 import Servant 
 import qualified Ext.HTTP.Response as Web
-import Model.PlaidTokenRequest
 import Database.Tables.Events
 
 -- data TestResponse = TestResponse

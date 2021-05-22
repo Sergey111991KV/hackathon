@@ -3,9 +3,9 @@
 
 module API.Token where
 
-import qualified Data.Text as T
+
 import qualified Ext.HTTP.Response as Web
-import Model.PlaidTokenRequest
+
 import Model.TokenRequest
 import Servant
 

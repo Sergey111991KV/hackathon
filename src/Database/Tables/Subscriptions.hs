@@ -59,3 +59,9 @@ loadSubscriptionsById subscriptionsId =
     from $ \s  -> do
       where_ $ s ^. SubscriptionsId ==. val subscriptionsId
       pure s
+
+
+loadAllSubscriptions :: (MonadUnliftIO m) =>
+  SqlPersistT m [P.Entity Subscriptions]
+loadAllSubscriptions  = 
+   select $ from 

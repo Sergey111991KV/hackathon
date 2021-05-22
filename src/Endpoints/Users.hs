@@ -8,6 +8,7 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Database
 import Database.Persist.Postgresql
 import Model.UserSerializer (UserSerializer (..))
+-- import Model.AllInformation
 
 getUserByIdEndpoint ::
   (MonadIO m, MonadThrow m) => AppHandle -> Int -> m (Maybe UserSerializer)
@@ -40,3 +41,13 @@ saveUserEndpoint AppHandle {..} userCreation = do
     liftIO . flip runSqlPersistMPool appHandleDbPool $
       createUserRecord userCreation
   return ()
+
+
+-- getAllInformation :: 
+--   (MonadIO m, MonadThrow m) => AppHandle -> Int -> m (AllInformation)
+-- getAllInformation userId = do
+--   user <-  fmap (fmap mapUser) $
+--     liftIO . flip runSqlPersistMPool appHandleDbPool $
+--       loadUserById (UserKey $ fromIntegral userId)
+
+--     -- loadAllUserEvents

@@ -11,14 +11,13 @@ import qualified Data.ByteString.Lazy as LB
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import Database.Persist.Postgresql
-import qualified Database.Persist.Postgresql as P
 import Database.Tables.PaidToken
-import Database.Tables.User
 
-import qualified Ext.HTTP.Error as Web
+
+-- import qualified Ext.HTTP.Error as Web
 import qualified Ext.HTTP.Response as Web
 import Model.PlaidTokenRequest
-import Model.TypePaidAction
+
 import Utils.CryptoRandomGen (getRandomByteString)
 
 getPaidTokenEndpoint ::

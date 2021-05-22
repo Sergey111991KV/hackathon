@@ -18,25 +18,35 @@ import Control.Monad.IO.Unlift (liftIO)
 -- import qualified Database.Tables.Events as DB
 import qualified Data.ByteString.Builder as B
 import qualified Data.ByteString.Lazy as LB
-import qualified Data.Text as T
+
 import qualified Data.Text.Encoding as T
 import Database
 import Database.Persist.Postgresql
 import qualified Database.Persist.Postgresql as P
 import Database.Tables.PaidToken
 import Database.Tables.Token
-import Database.Tables.User
 import Database.Tables.UserEvent
 import Database.Tables.UserSubsription
 import qualified Ext.HTTP.Error as Web
 import qualified Ext.HTTP.Response as Web
-import Model.PlaidTokenRequest
+
 import Model.TokenRequest
 import Model.TypePaidAction
 import Utils.CryptoRandomGen
-import Utils.CryptoRandomGen (getRandomByteString)
-import qualified Data.Time as Time
+import Database.Tables.Transaction 
+
 import qualified Ext.Data.Time as Time
+
+
+-- data CreateTransaction = CreateTransaction {
+--      userId :: Int,
+--      fromId :: Int,
+--      toIdType :: TypePaidAction,
+--      toId :: Int,
+--      amount :: Int
+-- }
+
+-- createTransaction :: MonadUnliftIO m =>
 
 exchangeTokenEndpoint ::
   (MonadIO m, MonadThrow m) => AppHandle -> ChangePlaidToken -> m (Web.WebApiHttpResponse UserToken)
@@ -48,12 +58,6 @@ exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
     pure (user, plaidToken)
   case dataLoad of
     (Just (Entity _ User {..}), Just (Entity _ PaidToken {..})) -> do
-      maybeUser <-
-        liftIO . flip runSqlPersistMPool appHandleDbPool $
-          loadUserById userKey
-      case maybeUser of
-        Nothing -> pure $ Web.failWith (Web.mkWebApiHttpError "Not found User " "UndefinedUserId")
-        Just (Entity _ User {..}) -> do
           if userBillT < paidTokenAmount
             then pure $ Web.failWith (Web.mkWebApiHttpError "Not enough money " "NotEnoughMoney ")
             else do
@@ -74,6 +78,13 @@ exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
                           textToken = toHexText newToken,
                           isActive = True
                         }
+                    createTransaction CreateTransaction{
+                                  userId = userIdChange,
+                                  fromId = userIdChange,
+                                  toIdType = Events,
+                                  toId = paidTokenIdAction,
+                                  amount = paidTokenAmount
+                            }
                   pure $ Web.result $ UserToken (toHexText newToken) userIdChange
                 Subscriptions -> do
                   _ <- liftIO . flip runSqlPersistMPool appHandleDbPool $ do
@@ -87,6 +98,13 @@ exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
                           textToken = toHexText newToken,
                           isActive = True
                         }
+                    createTransaction CreateTransaction{
+                                  userId = userIdChange,
+                                  fromId = userIdChange,
+                                  toIdType = Subscriptions,
+                                  toId = paidTokenIdAction,
+                                  amount = paidTokenAmount
+                            }
                   pure $ Web.result $ UserToken (toHexText newToken) userIdChange
     _ -> pure $ Web.failWith (Web.mkWebApiHttpError "Not found Entity " "NotFoundEntity ")
   where

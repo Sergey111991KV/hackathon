@@ -76,5 +76,5 @@ activateUserToken :: MonadUnliftIO m =>
   SqlPersistT m ()
 activateUserToken tokenText = do 
     update $ \token -> do
-    set token [TokenIsActive =. val False]
-    where_ $ token ^. TokenTextToken ==. val tokenText
+      set token [TokenIsActive =. val False]
+      where_ $ token ^. TokenTextToken ==. val tokenText

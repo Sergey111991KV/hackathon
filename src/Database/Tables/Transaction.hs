@@ -18,6 +18,9 @@ module Database.Tables.Transaction where
 
 import qualified Data.Time as Time
 import Database.Esqueleto
+import Model.TypePaidAction ( TypePaidAction )
+import Control.Monad.IO.Unlift (MonadIO (liftIO), MonadUnliftIO)
+import qualified Database.Persist.Postgresql as P
  
 
 import Database.Persist.TH
@@ -30,9 +33,34 @@ share
      createdAt Time.UTCTime
      userId Int
      fromId Int
+     toIdType TypePaidAction
      toId Int
      amount Int
      deriving Show
  |]
 
--- createTransaction
+
+
+data CreateTransaction = CreateTransaction {
+     userId :: Int,
+     fromId :: Int,
+     toIdType :: TypePaidAction,
+     toId :: Int,
+     amount :: Int
+}
+
+createTransaction :: MonadUnliftIO m =>
+  CreateTransaction ->
+  SqlPersistT m (P.Key Transaction, Time.UTCTime)
+createTransaction CreateTransaction {..} = do
+  now <- liftIO Time.getCurrentTime
+  rowOrderId <-
+    insert $
+      Transaction
+        now
+        userId
+        fromId
+        toIdType
+        toId
+        amount
+  pure (rowOrderId, now)

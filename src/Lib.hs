@@ -1,6 +1,4 @@
 module Lib
-   ( runDefaultExample,
-   )
  where
 
 
