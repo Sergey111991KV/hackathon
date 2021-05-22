@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Model.Achievements where
+module Model.Interests where
 
 import qualified Data.Aeson as J
 -- import qualified Data.Text as T
@@ -8,13 +8,13 @@ import qualified Data.Aeson as J
 -- import qualified Ext.Data.Aeson as J
 import GHC.Generics (Generic)
 
-import Database.Persist.TH
+import Database.Persist.TH ( derivePersistField )
  
-data Achievements = Travel | CityActivities | Connoisseur | DozenTickets | OtherAchievements
+data Interests = Food | Art | Consert | OtherInterest
     deriving (Show, Eq, Generic, Read)
 
-instance J.ToJSON Achievements
+instance J.ToJSON Interests
 
-instance J.FromJSON Achievements
+instance J.FromJSON Interests
 
-derivePersistField "Achievements"
+derivePersistField "Interests"

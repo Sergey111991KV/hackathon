@@ -27,6 +27,8 @@ import Model.PlaidTokenRequest
 import Control.Exception.Safe (MonadThrow)
 import Control.Monad.IO.Class (MonadIO)
 -- import qualified Database.Tables.Events as DB
+import qualified Data.ByteString.Builder as B
+import qualified Data.ByteString.Lazy as LB
 
 
 
@@ -43,11 +45,11 @@ sendPaidTokenEndpoint AppHandle {..} PlaidTokenSend {..} = do
             case maybeUser of
                 Nothing -> pure $ Web.failWith (Web.mkWebApiHttpError "Not found User " "UndefinedUserId")
                 Just (Entity _ User {..}) -> do
-                    if userBill < paidTokenAmount 
+                    if userBillT < paidTokenAmount 
                         then pure $ Web.failWith (Web.mkWebApiHttpError "Not enough money " "NotEnoughMoney ")
                         else do
                             _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
-                                updateUserBill userKey (userBill - paidTokenAmount )
+                                updateUserBill userKey (userBillT - paidTokenAmount )
                             case paidTokenTypeAction of
                                 Events  -> do
                                     _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
@@ -64,8 +66,10 @@ sendPaidTokenEndpoint AppHandle {..} PlaidTokenSend {..} = do
 getPaidTokenEndpoint :: 
     (MonadIO m, MonadThrow m) => AppHandle -> PlaidTokenGet -> m (Web.WebApiHttpResponse T.Text)
 getPaidTokenEndpoint AppHandle {..} PlaidTokenGet {..} = do
-    newToken <- liftIO $ getRandomByteString appHandleRandomGen  15
+    newToken <- liftIO $ getRandomByteString appHandleRandomGen  30
     _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
-                    createPaidTokenEntity typePay idPayAction (T.decodeUtf8 newToken) amount
-    pure $ Web.result (T.decodeUtf8 newToken)
+                    createPaidTokenEntity typePay idPayAction (toHexText newToken) amount
+    pure $ Web.result (toHexText newToken)
+    where
+        toHexText = T.decodeLatin1 . LB.toStrict . B.toLazyByteString . B.byteStringHex
     

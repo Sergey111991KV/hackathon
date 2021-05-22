@@ -44,12 +44,22 @@ share
      deriving Show
  |]
 
-loadEventsById ::
+createSubscriptionsRecord ::
+  (MonadUnliftIO m) => Events ->
+  SqlPersistT m (P.Key Events, Time.UTCTime)
+createSubscriptionsRecord subscriptions = do
+  now <- liftIO Time.getCurrentTime
+  rowOrderId <-
+    insert subscriptions
+      
+  pure (rowOrderId, now)
+
+loadSubscriptionsById ::
   MonadUnliftIO m =>
   P.Key Events ->
   SqlPersistT m (Maybe (P.Entity Events))
-loadEventsById eventsId =
+loadSubscriptionsById eventsId =
   fmap listToMaybe . select $
-    from $ \user -> do
-      where_ $ user ^. EventsId ==. val eventsId
-      pure user
+    from $ \s  -> do
+      where_ $ s ^. EventsId ==. val eventsId
+      pure s

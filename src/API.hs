@@ -8,17 +8,17 @@ module API
  where
 
 -- import qualified Config as C
-import Model.User (UserSerializer)
-import Data.Proxy (Proxy (..))
-import qualified Data.Text as T
+
+-- import Data.Proxy (Proxy (..))
+-- import qualified Data.Text as T
 import Servant 
-import API.PlaidToken
-import qualified Ext.HTTP.Response as Web
+import API.PlaidToken ( PlaidTokenAPI )
+-- import qualified Ext.HTTP.Response as Web
 -- data TestResponse = TestResponse
 --    { responseStatus :: Bool,
 --      responseText :: T.Text
 --    }
-import API.User
+import API.User ( UserAPI )
 
 
 type API = 

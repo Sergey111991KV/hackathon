@@ -5,11 +5,8 @@ module Endpoints.Users
  where
 import AppHandle (AppHandle (..))
 import Database
-   ( Key (UserKey),
-     User (..),
-     loadUserById,
-   )
-import Model.User (UserSerializer (..))
+ 
+import Model.UserSerializer (UserSerializer (..))
 import Control.Exception.Safe (MonadThrow)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Database.Persist.Postgresql
@@ -27,10 +24,23 @@ getUserByIdEndpoint AppHandle {..} userId =
        let User {..} = entityVal entity
         in UserSerializer
              { userId = fromIntegral . fromSqlKey $ entityKey entity,
-               userCreatedAt = userCreatedAt,
-               userPhone = userPhone
+               createdAt = userCreatedAt,
+               phone = userPhoneT,
+               nativeCity = userNativeCityT,
+               firstName = userFirstNameT,
+               secondName = userSecondNameT,
+               age = userAgeT,
+               bill = userBillT,
+               bonusBill = userBonusBillT,
+               interests = userInterestsT,
+               achievements = userAchievementsT
              }
   
+  -- createUserRecord
 saveUserEndpoint ::
-   (MonadIO m, MonadThrow m) => AppHandle -> UserSerializer -> m ()
-saveUserEndpoint = undefined 
+   (MonadIO m, MonadThrow m) => AppHandle -> UserCreation -> m ()
+saveUserEndpoint AppHandle {..} userCreation = do
+  _ <- liftIO . flip runSqlPersistMPool appHandleDbPool $ 
+       createUserRecord userCreation
+  return () 
+

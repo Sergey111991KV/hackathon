@@ -11,11 +11,23 @@ import qualified Config as C
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Database.Persist.Postgresql
 import  Database.Tables.Transaction  as Exports
+import Database.Tables.Subscriptions 
+import Database.Tables.Achievements  as Exports
+import Database.Tables.Events
+import Database.Tables.PaidToken 
+import Database.Tables.Partners 
+
+
 
 allMigrations :: [Migration]
 allMigrations =
   [ migrateUser,
-    migrateTransaction
+    migrateTransaction,
+    migrateAchievements,
+    migrateEvents,
+    migrateSubscriptions,
+    migratePartners,
+    migratePaidToken
   ]
 
 

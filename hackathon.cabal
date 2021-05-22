@@ -26,8 +26,16 @@ source-repository head
 library
   exposed-modules:
       API
+      API.Achievements
+      API.Events
+      API.Partners
       API.PlaidToken
+      API.Subscriptions
+      API.Token
+      API.Transaction
       API.User
+      API.UserEvents
+      API.UserSubsriptions
       AppHandle
       Auth
       Config
@@ -58,9 +66,12 @@ library
       Lib
       Model.Achievements
       Model.City
+      Model.Interests
+      Model.ModelEvents
       Model.PlaidTokenRequest
+      Model.TokenRequest
       Model.TypePaidAction
-      Model.User
+      Model.UserSerializer
       Server
       Utils.CryptoRandomGen
   hs-source-dirs:

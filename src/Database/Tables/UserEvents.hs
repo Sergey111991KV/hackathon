@@ -57,3 +57,7 @@ loadAllUserEvents userId =
    select $ from $ \a -> do
     where_ (a ^. UserEventsUserId ==. val userId)
     pure a
+
+-- createUserEvents :: (MonadUnliftIO m) =>
+--   Int ->
+--   SqlPersistT m [P.Entity UserEvents]

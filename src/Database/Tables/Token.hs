@@ -23,6 +23,9 @@ import Database.Esqueleto
  
 import qualified Database.Persist.Postgresql as P
 import Database.Persist.TH
+
+
+
 share
   [mkPersist sqlSettings, mkMigrate "migrateToken"]
   [persistLowerCase|
@@ -34,12 +37,43 @@ share
      isActive Bool
  |]
 
-loadServerTokenEntity ::
+data CreateToken = CreateToken {
+     userId :: Int,
+     typeEvents :: T.Text,
+     textToken :: T.Text ,
+     isActive :: Bool
+}
+
+createUserTokenEntity :: MonadUnliftIO m =>
+  CreateToken ->
+  SqlPersistT m (P.Key Token, Time.UTCTime)
+createUserTokenEntity CreateToken {..} = do
+  now <- liftIO Time.getCurrentTime
+  rowOrderId <-
+    insert $
+      Token
+        now
+        userId
+        typeEvents
+        textToken
+        isActive
+  pure (rowOrderId, now)
+
+
+loadUserToken ::
   MonadUnliftIO m =>
   T.Text ->
   SqlPersistT m (Maybe (P.Entity Token))
-loadServerTokenEntity token =
+loadUserToken token =
   fmap listToMaybe . select $
     from $ \user -> do
       where_ $ user ^. TokenTextToken ==. val token
       pure user
+
+activateUserToken :: MonadUnliftIO m =>
+  T.Text  ->
+  SqlPersistT m ()
+activateUserToken tokenText = do 
+    update $ \token -> do
+    set token [TokenIsActive =. val False]
+    where_ $ token ^. TokenTextToken ==. val tokenText
