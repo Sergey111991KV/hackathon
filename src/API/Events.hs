@@ -1,25 +1,18 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE RankNTypes #-}
 
-module API.Events
-  
- where
+module API.Events where
 
--- import qualified Config as C
--- import Model.User (UserSerializer)
--- import Data.Proxy (Proxy (..))
-import qualified Data.Text as T
-import Servant 
-import qualified Ext.HTTP.Response as Web
-import Database.Tables.Events
+-- import qualified Ext.HTTP.Response as Web
+import qualified Database.Tables.Events as DB
+import Model.Events
+import Servant
+    ( type (:>), ReqBody, JSON, Get, Post, type (:<|>), Capture )
 
--- data TestResponse = TestResponse
---    { responseStatus :: Bool,
---      responseText :: T.Text
---    }
+type EventsAPI = "events" :> (GetEventsAPI :<|> SendEventsAPI :<|> GetAllEventsAPI)
 
-type EventsAPI = "events" :> (GetEventsToken :<|> SendEventsToken)
+type GetEventsAPI = "getOne" :> Capture "id" Int :> Get '[JSON] (Maybe Events)
 
-type GetEventsToken = "get" :> Capture "id" Int :> Get '[JSON] (Web.WebApiHttpResponse T.Text)
+type SendEventsAPI = "save" :> ReqBody '[JSON] DB.EventsCreation :> Post '[JSON] ()
 
-type SendEventsToken = "save" :> ReqBody  '[JSON] Events :>  Post '[JSON] (Web.WebApiHttpResponse ())
+type GetAllEventsAPI = "getAll" :> Post '[JSON] [Events]

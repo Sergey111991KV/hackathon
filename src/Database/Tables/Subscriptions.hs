@@ -30,24 +30,30 @@ share
   [mkPersist sqlSettings, mkMigrate "migrateSubscriptions"]
   [persistLowerCase|
     Subscriptions
-     createdAt Time.UTCTime
-     userId Int
-     type T.Text
-     dateEnd Time.UTCTime
+     created Time.UTCTime
+     nameOrganization T.Text 
+     userUUID T.Text 
+     description T.Text 
  |]
 
 data SubscriptionsCreate = SubscriptionsCreate {
-
+      nameOrganization :: T.Text,
+      userUUID :: T.Text,
+      description :: T.Text 
 }
 
 createSubscriptionsRecord ::
-  (MonadUnliftIO m) => Subscriptions ->
+  (MonadUnliftIO m) => SubscriptionsCreate ->
   SqlPersistT m (P.Key Subscriptions, Time.UTCTime)
-createSubscriptionsRecord subscriptions = do
+createSubscriptionsRecord SubscriptionsCreate {..} = do
   now <- liftIO Time.getCurrentTime
   rowOrderId <-
-    insert subscriptions
-      
+    insert $
+      Subscriptions 
+        now
+        nameOrganization
+        userUUID
+        description
   pure (rowOrderId, now)
 
 loadSubscriptionsById ::
@@ -60,8 +66,7 @@ loadSubscriptionsById subscriptionsId =
       where_ $ s ^. SubscriptionsId ==. val subscriptionsId
       pure s
 
-
 loadAllSubscriptions :: (MonadUnliftIO m) =>
   SqlPersistT m [P.Entity Subscriptions]
 loadAllSubscriptions  = 
-   select $ from 
+   select $ from pure

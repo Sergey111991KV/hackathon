@@ -16,35 +16,31 @@
 module Database.Tables.User where
 
 import Control.Monad.IO.Unlift (MonadIO (liftIO), MonadUnliftIO)
+import qualified Data.Aeson as J
 import Data.Maybe (listToMaybe)
 import qualified Data.Text as T
 import qualified Data.Time as Time
 import Database.Esqueleto
-    ( (=.),
-      (==.),
-      (^.),
-      from,
-      select,
-      set,
-      update,
-      val,
-      where_,
-      BackendKey(SqlBackendKey),
-      PersistStoreWrite(insert),
-      SqlPersistT )
- 
+  ( BackendKey (SqlBackendKey),
+    PersistStoreWrite (insert),
+    SqlPersistT,
+    from,
+    select,
+    set,
+    update,
+    val,
+    where_,
+    (=.),
+    (==.),
+    (^.),
+  )
 import qualified Database.Persist.Postgresql as P
 import Database.Persist.TH
-
-
-import Model.City
-import Model.Achievements
-import Model.Interests
-
-import qualified Data.Aeson as J
-
+    ( persistLowerCase, mkMigrate, sqlSettings, mkPersist, share )
 import GHC.Generics (Generic)
-
+import Model.Achievements ( Achievements )
+import Model.City ( City )
+import Model.Interests ( Interests )
 
 share
   [mkPersist sqlSettings, mkMigrate "migrateUser"]
@@ -64,8 +60,8 @@ share
      deriving Show
  |]
 
-data UserCreation = UserCreation {
-    createdAt :: Time.UTCTime,
+data UserCreation = UserCreation
+  { createdAt :: Time.UTCTime,
     phone :: T.Text,
     nativeCity :: City,
     firstName :: T.Text,
@@ -75,18 +71,19 @@ data UserCreation = UserCreation {
     bonusBill :: Int,
     interests :: Maybe [Interests],
     achievements :: Maybe [Achievements],
-    isOrganizationCreat :: Maybe Bool 
-} deriving (Show, Eq, Generic)
+    isOrganizationCreat :: Maybe Bool
+  }
+  deriving (Show, Eq, Generic)
 
 instance J.ToJSON UserCreation
 
 instance J.FromJSON UserCreation
 
-
 createUserRecord ::
-  (MonadUnliftIO m) => UserCreation ->
+  (MonadUnliftIO m) =>
+  UserCreation ->
   SqlPersistT m (P.Key User, Time.UTCTime)
-createUserRecord UserCreation{..} = do
+createUserRecord UserCreation {..} = do
   now <- liftIO Time.getCurrentTime
   rowOrderId <-
     insert $

@@ -33,20 +33,11 @@ import qualified Ext.HTTP.Response as Web
 import Model.TokenRequest
 import Model.TypePaidAction
 import Utils.CryptoRandomGen
-import Database.Tables.Transaction 
+-- import Database.Tables.Transaction 
 
 import qualified Ext.Data.Time as Time
 
 
--- data CreateTransaction = CreateTransaction {
---      userId :: Int,
---      fromId :: Int,
---      toIdType :: TypePaidAction,
---      toId :: Int,
---      amount :: Int
--- }
-
--- createTransaction :: MonadUnliftIO m =>
 
 exchangeTokenEndpoint ::
   (MonadIO m, MonadThrow m) => AppHandle -> ChangePlaidToken -> m (Web.WebApiHttpResponse UserToken)
@@ -71,7 +62,7 @@ exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
                     updateUserBill userKey (userBillT - paidTokenAmount)
                     updateUserBonusBill userKey $  userBonusBillT + 10 
                     _ <- creatUserEvents userIdChange paidTokenIdAction  (Time.addMonth nowDate)
-                    createUserTokenEntity
+                    _ <- createUserTokenEntity
                       CreateToken
                         { userId = userIdChange,
                           typeEvents = Events,
@@ -91,7 +82,7 @@ exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
                     updateUserBill userKey (userBillT - paidTokenAmount)
                     updateUserBonusBill userKey $   userBonusBillT + 10 
                     _ <- creatUserSubsriptions userIdChange paidTokenIdAction
-                    createUserTokenEntity
+                    _ <- createUserTokenEntity
                       CreateToken
                         { userId = userIdChange,
                           typeEvents = Subscriptions,

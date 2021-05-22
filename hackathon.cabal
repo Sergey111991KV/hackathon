@@ -54,6 +54,7 @@ library
       Database.Tables.UserSubsription
       Endpoints.Events
       Endpoints.PlaidToken
+      Endpoints.Subscription
       Endpoints.Token
       Endpoints.Users
       Ext.Data.Aeson
@@ -68,6 +69,7 @@ library
       Model.Achievements
       Model.AllInformation
       Model.City
+      Model.Events
       Model.Interests
       Model.ModelEvents
       Model.PlaidTokenRequest

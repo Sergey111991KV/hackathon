@@ -22,12 +22,30 @@ import Network.Wai.Middleware.Cors
   )
 import Network.Wai.Middleware.Servant.Options (provideOptions)
 import Servant
+import Endpoints.Events
+
+-- getAllEventsEndpoint ::  (MonadIO m, MonadThrow m) =>  AppHandle -> m [Events]
+-- getAllEventsEndpoint AppHandle {..} = do
+--     events <- liftIO . flip runSqlPersistMPool appHandleDbPool $
+--       loadAllEvents 
+--     return $ fmap entityVal events
+
+-- getEventsEndpoint ::
+--   (MonadIO m, MonadThrow m) => AppHandle -> Int -> m (Maybe Events)
+-- getEventsEndpoint AppHandle {..} eventsId =
+--   fmap (fmap entityVal) $
+--     liftIO . flip runSqlPersistMPool appHandleDbPool $
+--       loadEventsById ( P.toSqlKey $ fromIntegral eventsId)
+  
+     
+-- saveEventsEndpoint ::
+
 
 handler ::
   (MonadIO m, MonadThrow m) =>
   AppHandle ->
   ServerT API m
-handler h = paidToken :<|> user :<|> token
+handler h = paidToken :<|> user :<|> token :<|>  events
   where
     paidToken = getPaidTokenEndpoint h
     user =
@@ -36,7 +54,10 @@ handler h = paidToken :<|> user :<|> token
     token =
       exchangeTokenEndpoint h
         :<|> deactivateTokenEndpoint h
-
+    events = 
+      getEventsEndpoint h
+        :<|> saveEventsEndpoint h
+          :<|> getAllEventsEndpoint h
 catchServantErrorsFromIO :: ServerT API IO -> Server API
 catchServantErrorsFromIO = hoistServer apiType (Handler . ExceptT . try)
 

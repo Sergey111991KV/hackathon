@@ -11,13 +11,14 @@ module API
 import Servant 
 import API.PlaidToken ( PlaidTokenAPI )
 import API.Token
+import API.Events
   
 
 import API.User ( UserAPI )
 
 
 type API = 
-  PlaidTokenAPI :<|> UserAPI :<|> TokenAPI
+  PlaidTokenAPI :<|> UserAPI :<|> TokenAPI :<|> EventsAPI
  
 
 apiType :: Proxy API
