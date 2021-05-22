@@ -26,8 +26,8 @@ import qualified Database.Persist.Postgresql as P
 import Database.Tables.PaidToken
 import Database.Tables.Token
 import Database.Tables.User
-import Database.Tables.UserEvents
-import Database.Tables.UserSubsriptions
+import Database.Tables.UserEvent
+import Database.Tables.UserSubsription
 import qualified Ext.HTTP.Error as Web
 import qualified Ext.HTTP.Response as Web
 import Model.PlaidTokenRequest
@@ -35,10 +35,13 @@ import Model.TokenRequest
 import Model.TypePaidAction
 import Utils.CryptoRandomGen
 import Utils.CryptoRandomGen (getRandomByteString)
+import qualified Data.Time as Time
+import qualified Ext.Data.Time as Time
 
 exchangeTokenEndpoint ::
   (MonadIO m, MonadThrow m) => AppHandle -> ChangePlaidToken -> m (Web.WebApiHttpResponse UserToken)
 exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
+  nowDate <- Time.getToday
   dataLoad <- liftIO . flip runSqlPersistMPool appHandleDbPool $ do
     user <- loadUserById userKey
     plaidToken <- loadPaidTokenEntity payToken
@@ -61,8 +64,9 @@ exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
               case paidTokenTypeAction of
                 Events -> do
                   _ <- liftIO . flip runSqlPersistMPool appHandleDbPool $ do
-                    updateUserBonusBill userKey (userBillT - paidTokenAmount)
-                    _ <- creatUserEvents userIdChange paidTokenIdAction
+                    updateUserBill userKey (userBillT - paidTokenAmount)
+                    updateUserBonusBill userKey $  userBonusBillT + 10 
+                    _ <- creatUserEvents userIdChange paidTokenIdAction  (Time.addMonth nowDate)
                     createUserTokenEntity
                       CreateToken
                         { userId = userIdChange,
@@ -73,7 +77,8 @@ exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
                   pure $ Web.result $ UserToken (toHexText newToken) userIdChange
                 Subscriptions -> do
                   _ <- liftIO . flip runSqlPersistMPool appHandleDbPool $ do
-                    updateUserBonusBill userKey (userBillT - paidTokenAmount)
+                    updateUserBill userKey (userBillT - paidTokenAmount)
+                    updateUserBonusBill userKey $   userBonusBillT + 10 
                     _ <- creatUserSubsriptions userIdChange paidTokenIdAction
                     createUserTokenEntity
                       CreateToken

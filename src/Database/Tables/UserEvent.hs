@@ -13,10 +13,9 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module Database.Tables.UserSubsriptions where
+module Database.Tables.UserEvent where
 
 import Control.Monad.IO.Unlift (MonadIO (liftIO), MonadUnliftIO)
-
 
 import qualified Data.Time as Time
 import Database.Esqueleto
@@ -28,33 +27,40 @@ import Database.Persist.TH
 
 
 share
-  [mkPersist sqlSettings, mkMigrate "migrateUserSubsriptions"]
+  [mkPersist sqlSettings, mkMigrate "migrateUserEvent"]
   [persistLowerCase|
- UserSubsriptions
+ UserEvent
      createdAt Time.UTCTime
      idEvents Int 
      userId Int
+     endDate Time.Day
      deriving Show
  |]
 
-creatUserSubsriptions :: (MonadUnliftIO m) =>
+creatUserEvents :: (MonadUnliftIO m) =>
   Int ->
   Int ->
-  SqlPersistT m (P.Key UserSubsriptions, Time.UTCTime)
-creatUserSubsriptions userId idEvents = do
+    Time.Day ->
+  SqlPersistT m (P.Key UserEvent, Time.UTCTime)
+creatUserEvents userId idEvents endDate = do
   now <- liftIO Time.getCurrentTime
   rowOrderId <-
     insert $
-      UserSubsriptions
+      UserEvent
         now
         userId
         idEvents
+        endDate
   pure (rowOrderId, now)
 
-loadAllUserSubsriptions :: (MonadUnliftIO m) =>
+loadAllUserEvents :: (MonadUnliftIO m) =>
   Int ->
-  SqlPersistT m [P.Entity UserSubsriptions]
-loadAllUserSubsriptions userId = 
+  SqlPersistT m [P.Entity UserEvent]
+loadAllUserEvents userId = 
    select $ from $ \a -> do
-    where_ (a ^. UserSubsriptionsUserId ==. val userId)
+    where_ (a ^. UserEventUserId ==. val userId)
     pure a
+
+-- createUserEvents :: (MonadUnliftIO m) =>
+--   Int ->
+--   SqlPersistT m [P.Entity UserEvents]

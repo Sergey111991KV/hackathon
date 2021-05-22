@@ -24,7 +24,7 @@ allMigrations :: [Migration]
 allMigrations =
   [ migrateUser,
     migrateTransaction,
-    migrateAchievements,
+    migrateAchievement,
     migrateEvents,
     migrateSubscriptions,
     migratePartners,

@@ -50,8 +50,8 @@ library
       Database.Tables.Token
       Database.Tables.Transaction
       Database.Tables.User
-      Database.Tables.UserEvents
-      Database.Tables.UserSubsriptions
+      Database.Tables.UserEvent
+      Database.Tables.UserSubsription
       Endpoints.Events
       Endpoints.PlaidToken
       Endpoints.Token
@@ -66,13 +66,17 @@ library
       Ext.Logger.Config
       Lib
       Model.Achievements
+      Model.AllInformation
       Model.City
       Model.Interests
       Model.ModelEvents
       Model.PlaidTokenRequest
       Model.TokenRequest
+      Model.Transaction
       Model.TypePaidAction
+      Model.UserEvents
       Model.UserSerializer
+      Model.UserSubsriptions
       Server
       Utils.CryptoRandomGen
   hs-source-dirs:

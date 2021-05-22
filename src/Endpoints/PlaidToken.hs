@@ -14,8 +14,7 @@ import Database.Persist.Postgresql
 import qualified Database.Persist.Postgresql as P
 import Database.Tables.PaidToken
 import Database.Tables.User
-import Database.Tables.UserEvents
-import Database.Tables.UserSubsriptions
+
 import qualified Ext.HTTP.Error as Web
 import qualified Ext.HTTP.Response as Web
 import Model.PlaidTokenRequest

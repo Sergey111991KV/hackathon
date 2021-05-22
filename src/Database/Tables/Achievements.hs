@@ -15,43 +15,42 @@
 
 module Database.Tables.Achievements where
 
-import qualified Data.Text as T 
-
-
-import Database.Esqueleto
-
-import Database.Persist.TH
-import Control.Monad.IO.Unlift 
-import qualified Database.Persist.Postgresql as P
+import Control.Monad.IO.Unlift
 import Data.Maybe (listToMaybe)
+import qualified Data.Text as T
 import qualified Data.Time as Time
+import Database.Esqueleto
+import qualified Database.Persist.Postgresql as P
+import Database.Persist.TH
 
 
 share
-  [mkPersist sqlSettings, mkMigrate "migrateAchievements"]
+  [mkPersist sqlSettings, mkMigrate "migrateAchievement"]
   [persistLowerCase|
-    Achievements
+    Achievement
      name Int
      logo T.Text
      deriving Show
  |]
 
-createSubscriptionsRecord ::
-  (MonadUnliftIO m) => Achievements ->
-  SqlPersistT m (P.Key Achievements, Time.UTCTime)
-createSubscriptionsRecord subscriptions = do
+createAchievementsRecord ::
+  (MonadUnliftIO m) =>
+  Achievement ->
+  SqlPersistT m (P.Key Achievement, Time.UTCTime)
+createAchievementsRecord subscriptions = do
   now <- liftIO Time.getCurrentTime
   rowOrderId <-
     insert subscriptions
-      
+
   pure (rowOrderId, now)
 
-loadSubscriptionsById ::
+loadAchievementsById ::
   MonadUnliftIO m =>
-  P.Key Achievements ->
-  SqlPersistT m (Maybe (P.Entity Achievements))
-loadSubscriptionsById achievementsId =
+  P.Key Achievement ->
+  SqlPersistT m (Maybe (P.Entity Achievement))
+loadAchievementsById achievementId =
   fmap listToMaybe . select $
-    from $ \s  -> do
-      where_ $ s ^. AchievementsId ==. val achievementsId
+    from $ \s -> do
+      where_ $ s ^. AchievementId ==. val achievementId
       pure s
+

@@ -16,3 +16,9 @@ instance MonadClock IO where
 
 now :: MonadIO m => m Time.UTCTime
 now = liftIO currentTime
+
+addMonth :: Time.Day -> Time.Day
+addMonth = Time.addGregorianMonthsClip 1
+
+getToday :: MonadIO m => m Time.Day
+getToday = Time.utctDay <$> now
