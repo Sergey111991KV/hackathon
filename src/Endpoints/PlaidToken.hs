@@ -20,7 +20,7 @@ import qualified Database.Persist.Postgresql as P
 import Model.TypePaidAction
 import Database.Tables.UserEvents
 import Database.Tables.UserSubsriptions
-import Utils.CryptoRandomGen
+import Utils.CryptoRandomGen ( getRandomByteString )
 import Control.Monad.IO.Unlift (liftIO)
 import qualified Data.Text.Encoding as T
 import Model.PlaidTokenRequest

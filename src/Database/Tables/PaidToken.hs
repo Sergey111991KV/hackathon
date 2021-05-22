@@ -23,7 +23,7 @@ import Database.Esqueleto
  
 import qualified Database.Persist.Postgresql as P
 import Database.Persist.TH
-import Model.TypePaidAction
+import Model.TypePaidAction ( TypePaidAction )
 
 
 share

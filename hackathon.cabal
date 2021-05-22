@@ -54,6 +54,7 @@ library
       Database.Tables.UserSubsriptions
       Endpoints.Events
       Endpoints.PlaidToken
+      Endpoints.Token
       Endpoints.Users
       Ext.Data.Aeson
       Ext.Data.Env

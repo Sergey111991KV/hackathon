@@ -23,6 +23,7 @@ import Database.Esqueleto
  
 import qualified Database.Persist.Postgresql as P
 import Database.Persist.TH
+import Model.TypePaidAction ( TypePaidAction )
 
 
 
@@ -32,14 +33,14 @@ share
     Token
      createdAt Time.UTCTime
      userId Int
-     typeEvents T.Text
+     typeEvents TypePaidAction
      textToken T.Text
      isActive Bool
  |]
 
 data CreateToken = CreateToken {
      userId :: Int,
-     typeEvents :: T.Text,
+     typeEvents :: TypePaidAction,
      textToken :: T.Text ,
      isActive :: Bool
 }
