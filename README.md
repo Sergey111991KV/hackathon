@@ -1,3 +1,21 @@
+# Description
+
+ Сервер написан на Haskell, использовался AppleHanlde. 
+ Использовал Docker & PostGIS.
+ Команды по запуску 
+    
+    - docker-compose up -d db
+
+Для запуска самого сервера необходимо скачать stack и использовать комманду
+
+    - stack build
+
+    - stack ghci
+
+Для запуска миграции запустить команду
+
+    - runAllMigrations
+
 # API
 
 ## USER
