@@ -23,8 +23,7 @@ import Database.Persist.TH
 import Control.Monad.IO.Unlift (MonadIO (liftIO), MonadUnliftIO)
 import qualified Database.Persist.Postgresql as P
 import Data.Maybe (listToMaybe)
-import qualified Data.Aeson as J
-import GHC.Generics (Generic)
+
 
 
 share

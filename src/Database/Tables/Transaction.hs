@@ -15,9 +15,7 @@
 
 module Database.Tables.Transaction where
 
--- import Control.Monad.IO.Unlift (MonadIO (liftIO), MonadUnliftIO)
 
--- import qualified Data.Text as T
 import qualified Data.Time as Time
 import Database.Esqueleto
  

@@ -6,7 +6,6 @@ where
 import qualified Data.Aeson as J
 import qualified Data.Text as T
 import qualified Data.Time as Time
---  import qualified Ext.Data.Aeson as J
 import GHC.Generics (Generic)
 import Model.Achievements
 import Model.City
@@ -30,8 +29,7 @@ data UserSerializer = UserSerializer
 
 instance J.ToJSON UserSerializer
 
---  toJSON = J.droppedPrefixDecode
+
 
 instance J.FromJSON UserSerializer
 
---  toJSON = J.droppedPrefixDecode
