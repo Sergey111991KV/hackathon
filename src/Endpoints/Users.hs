@@ -33,7 +33,8 @@ getUserByIdEndpoint AppHandle {..} userId =
                bill = userBillT,
                bonusBill = userBonusBillT,
                interests = userInterestsT,
-               achievements = userAchievementsT
+               achievements = userAchievementsT,
+               isOrganization = userIsOrganization
              }
   
   -- createUserRecord

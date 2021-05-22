@@ -16,6 +16,7 @@ import Database.Tables.Achievements  as Exports
 import Database.Tables.Events
 import Database.Tables.PaidToken 
 import Database.Tables.Partners 
+import Database.Tables.Token
 
 
 
@@ -27,7 +28,8 @@ allMigrations =
     migrateEvents,
     migrateSubscriptions,
     migratePartners,
-    migratePaidToken
+    migratePaidToken,
+    migrateToken
   ]
 
 

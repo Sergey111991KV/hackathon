@@ -60,6 +60,7 @@ share
      bonusBillT Int
      interestsT [Interests] Maybe 
      achievementsT [Achievements] Maybe
+     isOrganization Bool Maybe
      deriving Show
  |]
 
@@ -72,8 +73,9 @@ data UserCreation = UserCreation {
     age :: Int,
     bill :: Int,
     bonusBill :: Int,
-    interests:: Maybe [Interests],
-    achievements :: Maybe [Achievements]
+    interests :: Maybe [Interests],
+    achievements :: Maybe [Achievements],
+    isOrganizationCreat :: Maybe Bool 
 } deriving (Show, Eq, Generic)
 
 instance J.ToJSON UserCreation
@@ -99,6 +101,7 @@ createUserRecord UserCreation{..} = do
         bonusBill
         interests
         achievements
+        isOrganizationCreat
   pure (rowOrderId, now)
 
 loadUserById ::

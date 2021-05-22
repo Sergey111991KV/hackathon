@@ -23,7 +23,8 @@ data UserSerializer = UserSerializer
     bill :: Int,
     bonusBill :: Int,
     interests:: Maybe [Interests],
-    achievements :: Maybe [Achievements]
+    achievements :: Maybe [Achievements],
+    isOrganization :: Maybe Bool
   }
   deriving (Show, Eq, Generic)
 
