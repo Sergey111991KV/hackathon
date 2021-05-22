@@ -31,18 +31,27 @@ import qualified Data.ByteString.Builder as B
 import qualified Data.ByteString.Lazy as LB
 import Model.TokenRequest
 import Database.Tables.Token 
+import Database
 
 
 sendTokenEndpoint ::
     (MonadIO m, MonadThrow m) => AppHandle -> ChangePlaidToken -> m (Web.WebApiHttpResponse (Maybe UserToken))
 sendTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
-    (user,plaidToken) <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
-                    loadUserById userKey
+    dataLoad <-  liftIO . flip runSqlPersistMPool appHandleDbPool $ do
+                    user <- loadUserById userKey
+                    plaidToken <- loadPaidTokenEntity payToken
+                    pure (user,plaidToken)
+    case dataLoad of
+        (Just user, Just plaidToken)
+        _ -> 
     --    loadPaidTokenEntity token
     undefined
     where
-        userKey = (UserKey $ fromIntegral userId)
+        userKey = UserKey $ fromIntegral userIdChange
      
+
+
+
 
 
 
