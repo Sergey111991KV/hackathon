@@ -39,34 +39,66 @@ import Utils.CryptoRandomGen ( getRandomByteString )
 
 
 
+
 exchangeTokenEndpoint ::
     (MonadIO m, MonadThrow m) => AppHandle -> ChangePlaidToken -> m (Web.WebApiHttpResponse UserToken)
 exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
-    dataLoad <-  liftIO . flip runSqlPersistMPool appHandleDbPool $ do
-                    user <- loadUserById userKey
-                    plaidToken <- loadPaidTokenEntity payToken
-                    pure (user,plaidToken)
-    case dataLoad of
-        (Just ( Entity _ User {..}), Just ( Entity _ PaidToken {..})) ->  do
-            if (userBillT - paidTokenAmount) >= 0 
-                then do
-                    newToken <- liftIO $ getRandomByteString appHandleRandomGen  30
-                    _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $ do
-                            updateUserBonusBill userKey (userBillT - paidTokenAmount)
-                            createUserTokenEntity CreateToken { 
-                                    userId = userIdChange,
-                                    typeEvents = paidTokenTypeAction,
-                                    textToken = toHexText newToken ,
-                                    isActive = True
-                            }
-                    pure $ Web.result $ UserToken (toHexText newToken) userIdChange
-                else pure $ Web.failWith (Web.mkWebApiHttpError "Not enough money for operation" "NotEnoughMoney ")
-
-        _ -> pure $ Web.failWith (Web.mkWebApiHttpError "Not found Entity " "NotFoundEntity ")
-
+    tokenEnt <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
+       loadPaidTokenEntity token
+    case tokenEnt of
+        Nothing -> pure $ Web.failWith (Web.mkWebApiHttpError "Cann't find token " "UndefinedToken")
+        Just (Entity _ PaidToken {..}) -> do
+            maybeUser <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
+                loadUserById  userKey
+            case maybeUser of
+                Nothing -> pure $ Web.failWith (Web.mkWebApiHttpError "Not found User " "UndefinedUserId")
+                Just (Entity _ User {..}) -> do
+                    if userBillT < paidTokenAmount 
+                        then pure $ Web.failWith (Web.mkWebApiHttpError "Not enough money " "NotEnoughMoney ")
+                        else do
+                            _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
+                                updateUserBill userKey (userBillT - paidTokenAmount )
+                            case paidTokenTypeAction of
+                                Events  -> do
+                                    _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
+                                        creatUserEvents userId paidTokenIdAction
+                                    pure $ Web.result ()
+                                Subscriptions -> do
+                                    _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
+                                        creatUserSubsriptions userId paidTokenIdAction
+                                    pure $ Web.result ()                         
     where
-        userKey = UserKey $ fromIntegral userIdChange
-        toHexText = T.decodeLatin1 . LB.toStrict . B.toLazyByteString . B.byteStringHex
+        userKey = P.toSqlKey $ fromIntegral userId
+
+
+-- exchangeTokenEndpoint ::
+--     (MonadIO m, MonadThrow m) => AppHandle -> ChangePlaidToken -> m (Web.WebApiHttpResponse UserToken)
+-- exchangeTokenEndpoint AppHandle {..} ChangePlaidToken {..} = do
+--     dataLoad <-  liftIO . flip runSqlPersistMPool appHandleDbPool $ do
+--                     user <- loadUserById userKey
+--                     plaidToken <- loadPaidTokenEntity payToken
+--                     pure (user,plaidToken)
+--     case dataLoad of
+--         (Just ( Entity _ User {..}), Just ( Entity _ PaidToken {..})) ->  do
+--             if (userBillT - paidTokenAmount) >= 0 
+--                 then do
+--                     newToken <- liftIO $ getRandomByteString appHandleRandomGen  30
+--                     _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $ do
+--                             updateUserBonusBill userKey (userBillT - paidTokenAmount)
+--                             createUserTokenEntity CreateToken { 
+--                                     userId = userIdChange,
+--                                     typeEvents = paidTokenTypeAction,
+--                                     textToken = toHexText newToken ,
+--                                     isActive = True
+--                             }
+--                     pure $ Web.result $ UserToken (toHexText newToken) userIdChange
+--                 else pure $ Web.failWith (Web.mkWebApiHttpError "Not enough money for operation" "NotEnoughMoney ")
+
+--         _ -> pure $ Web.failWith (Web.mkWebApiHttpError "Not found Entity " "NotFoundEntity ")
+
+--     where
+--         userKey = UserKey $ fromIntegral userIdChange
+--         toHexText = T.decodeLatin1 . LB.toStrict . B.toLazyByteString . B.byteStringHex
      
 deactivateTokenEndpoint :: 
     (MonadIO m, MonadThrow m) => AppHandle -> UserToken -> m (Web.WebApiHttpResponse ())

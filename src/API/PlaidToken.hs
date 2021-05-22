@@ -18,8 +18,7 @@ import Model.PlaidTokenRequest
 --      responseText :: T.Text
 --    }
 
-type PlaidTokenAPI = "plaid-token" :> (GetPlaidToken :<|> SendPlaidToken)
+type PlaidTokenAPI = "plaid-token" :> GetPlaidToken
 
 type GetPlaidToken = "get" :> ReqBody '[JSON] PlaidTokenGet :> Get '[JSON] (Web.WebApiHttpResponse T.Text)
 
-type SendPlaidToken = "send" :> ReqBody  '[JSON] PlaidTokenSend :>  Post '[JSON] (Web.WebApiHttpResponse ())

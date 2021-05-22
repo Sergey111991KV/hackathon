@@ -36,7 +36,6 @@
  handler h = paidToken :<|> user :<|> token
   where
     paidToken = getPaidTokenEndpoint h 
-            :<|> sendPaidTokenEndpoint h
     user = getUserByIdEndpoint h
             :<|> saveUserEndpoint h
     token = exchangeTokenEndpoint h 

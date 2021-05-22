@@ -32,35 +32,7 @@ import qualified Data.ByteString.Lazy as LB
 
 
 
-sendPaidTokenEndpoint ::
-    (MonadIO m, MonadThrow m) => AppHandle -> PlaidTokenSend -> m (Web.WebApiHttpResponse ())
-sendPaidTokenEndpoint AppHandle {..} PlaidTokenSend {..} = do
-    tokenEnt <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
-       loadPaidTokenEntity token
-    case tokenEnt of
-        Nothing -> pure $ Web.failWith (Web.mkWebApiHttpError "Cann't find token " "UndefinedToken")
-        Just (Entity _ PaidToken {..}) -> do
-            maybeUser <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
-                loadUserById  userKey
-            case maybeUser of
-                Nothing -> pure $ Web.failWith (Web.mkWebApiHttpError "Not found User " "UndefinedUserId")
-                Just (Entity _ User {..}) -> do
-                    if userBillT < paidTokenAmount 
-                        then pure $ Web.failWith (Web.mkWebApiHttpError "Not enough money " "NotEnoughMoney ")
-                        else do
-                            _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
-                                updateUserBill userKey (userBillT - paidTokenAmount )
-                            case paidTokenTypeAction of
-                                Events  -> do
-                                    _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
-                                        creatUserEvents userId paidTokenIdAction
-                                    pure $ Web.result ()
-                                Subscriptions -> do
-                                    _ <-  liftIO . flip runSqlPersistMPool appHandleDbPool $
-                                        creatUserSubsriptions userId paidTokenIdAction
-                                    pure $ Web.result ()                         
-    where
-        userKey = P.toSqlKey $ fromIntegral userId
+
 
             
 getPaidTokenEndpoint :: 
