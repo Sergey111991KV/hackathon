@@ -92,6 +92,7 @@ library
     , basement
     , bytestring
     , co-log
+    , conduit
     , configurator
     , cryptonite
     , either
@@ -105,8 +106,10 @@ library
     , mtl
     , persistent
     , persistent-postgresql
+    , persistent-sqlite
     , persistent-template
     , postgresql-simple
+    , process
     , random
     , resource-pool
     , resourcet
@@ -143,6 +146,7 @@ executable hackathon-exe
     , basement
     , bytestring
     , co-log
+    , conduit
     , configurator
     , cryptonite
     , either
@@ -157,8 +161,10 @@ executable hackathon-exe
     , mtl
     , persistent
     , persistent-postgresql
+    , persistent-sqlite
     , persistent-template
     , postgresql-simple
+    , process
     , random
     , resource-pool
     , resourcet
@@ -196,6 +202,7 @@ test-suite hackathon-test
     , basement
     , bytestring
     , co-log
+    , conduit
     , configurator
     , cryptonite
     , either
@@ -210,8 +217,10 @@ test-suite hackathon-test
     , mtl
     , persistent
     , persistent-postgresql
+    , persistent-sqlite
     , persistent-template
     , postgresql-simple
+    , process
     , random
     , resource-pool
     , resourcet

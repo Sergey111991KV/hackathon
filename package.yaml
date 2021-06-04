@@ -37,6 +37,8 @@ dependencies:
 - random
 - basement
 - cryptonite
+- process
+- conduit
 
 # Logger
 - co-log
@@ -51,6 +53,7 @@ dependencies:
 - persistent-template
 - esqueleto
 - resource-pool
+- persistent-sqlite
 
 # Web
 - jose
